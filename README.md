@@ -50,7 +50,7 @@ We organize code primarily **by feature**, not by functionality. That means we c
 
 We do keep tests in a subfolder to make it easier to differentiate between `actions.js` and `actions.test.js` etc.
 
-### State management / Reudx
+### State management / Redux
 We *manage* application state with [Redux ➝](http://redux.js.org), make it
 *immutable* with [ImmutableJS ➝](https://facebook.github.io/immutable-js/), improve *performance*
 with [reselect ➝](https://github.com/reactjs/reselect) and handle *side effects* like data fetching or login with [redux-saga ➝](http://yelouafi.github.io/redux-saga/).

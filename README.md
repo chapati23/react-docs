@@ -90,7 +90,7 @@ We use [react-intl ➝](https://github.com/yahoo/react-intl) for internationaliz
 Read further docs on [CSS Modules](./docs/css/css-modules.md) and [PostCSS](./docs/css/postcss.md).
 
 
-## Fonts Overview
+## Fonts
 ### Performant Web Font Loading
 
 If you import web fonts naively, you'll either have blank page until

@@ -10,14 +10,16 @@
 </div>
 
 # Frontend Technology Stack
+### Contribution
+Please find below an outline of our current architecture. As the frontend landscape changes at mindboggling speed, if you read this and think „I know of a better way to do XYZ!“ we highly encourage you to discuss it with the team.
 
 ### Navigation <small style="color: grey; font-weight: normal">(↓ marks in-document links)</small>
 | **General** | **JavaScript** | **CSS** | **Testing** |
 |----------|----------|----------|----------|
 | ↓ [Tooling](#tooling) | ↓ [Javascript Overview](#javascript-overview) | ↓ [CSS & Styling Overview](#css-overview) |  ↓ [Testing Overview](#testing-overview) | [Reselect](./docs/js/reselect.md) |
-| ↓ [Deployment](#deployment) | [ImmutableJS](./docs/js/immutablejs.md) | ↓ [Fonts](#fonts) | [Unit Testing](./docs/testing/unit-testing.md) | |
-| ↓ [File Glossary](#file-glossary) |[Redux Saga](./docs/js/redux-saga.md) | [CSS Modules](./docs/css/css-modules.md) | [Component Testing](./docs/testing/component-testing.md) |
-|| [Routing](./docs/js/routing.md) | [PostCSS](./docs/css/postcss.md) | [Redux Testing](./docs/testing/redux-testing.md) |
+| ↓ [npm Commands](#npm-commands) | [ImmutableJS](./docs/js/immutablejs.md) | [PostCSS](./docs/css/postcss.md) | [Unit Testing](./docs/testing/unit-testing.md) | |
+| ↓ [Deployment](#deployment) |[Redux Saga](./docs/js/redux-saga.md) | [CSS Modules](./docs/css/css-modules.md) | [Component Testing](./docs/testing/component-testing.md) |
+| ↓ [File Glossary](#file-glossary) | [Routing](./docs/js/routing.md) || [Redux Testing](./docs/testing/redux-testing.md) |
 || [i18n](./docs/js/i18n.md)
 
 ## JavaScript Overview
@@ -90,28 +92,6 @@ We use [react-intl ➝](https://github.com/yahoo/react-intl) for internationaliz
 Read further docs on [CSS Modules](./docs/css/css-modules.md) and [PostCSS](./docs/css/postcss.md).
 
 
-## Fonts
-### Performant Web Font Loading
-
-If you import web fonts naively, you'll either have blank page until
-the fonts are downloaded or face an ugly FOUC (Flash of unstyled content). Both scenarios aren't ideal.
-
-[FontFaceObserver ➝](https://github.com/bramstein/fontfaceobserver) adds a class
-to the `body` when the fonts have loaded. (see [`app.js`](../../app/app.js#L26-L36)
-and [`App/styles.css`](../../app/containers/App/styles.css))
-
-### Adding a new font
-
-1. Either add the `@font-face` declaration to `App/styles.css` or add a `<link>`
-tag to the [`index.html`](../../app/index.html).
-
-2. In `App/styles.css`, specify your initial `font-family` in the `body` tag
-with only web-save fonts. In the `body.jsFontLoaded` tag, specify your
-`font-family` stack with your web font.
-
-3. In `app.js` add a `<fontName>Observer` for your font.
-
-
 ## Testing Overview
 
 ### Toolchain
@@ -139,9 +119,6 @@ TODO: Add details on deployment once we have a deployment target…
 
 
 ## Tooling
-
-### npm commands
-We have a [detailed doc](./docs/general/npm-commands.md) of available npm scripts with explanations.
 
 ### Babel
 * ES6/7 support thanks to `babel-react`, `babel-preset-latest` and `babel-preset-stage-0`
@@ -185,6 +162,27 @@ We use [Plop ➝](https://github.com/amwmedia/plop) to generate new components f
 ### Devtools
 [Redux devtools ➝](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd) should work out of the box.
 
+### Fonts
+#### Performant Web Font Loading
+
+If you import web fonts naively, you'll either have blank page until
+the fonts are downloaded or face an ugly FOUC (Flash of unstyled content). Both scenarios aren't ideal.
+
+[FontFaceObserver ➝](https://github.com/bramstein/fontfaceobserver) adds a class
+to the `body` when the fonts have loaded. (see [`app.js`](../../app/app.js#L26-L36)
+and [`App/styles.css`](../../app/containers/App/styles.css))
+
+#### Adding a new font
+
+1. Either add the `@font-face` declaration to `App/styles.css` or add a `<link>`
+tag to the [`index.html`](../../app/index.html).
+
+2. In `App/styles.css`, specify your initial `font-family` in the `body` tag
+with only web-save fonts. In the `body.jsFontLoaded` tag, specify your
+`font-family` stack with your web font.
+
+3. In `app.js` add a `<fontName>Observer` for your font.
+
 ### Server Configurations
 For routing to work correctly, we'll need to set up some server configs.
 
@@ -210,6 +208,166 @@ Availability without network connection is powered by a ServiceWorker with a fal
 After repeat visits to the website, users will get a prompt to add the application to their homescreen. Combined with offline caching, this means our web app can be used exactly like a native application (without the limitations of an app store).
 
 The name and icon to be displayed are set in the `app/manifest.json`.
+
+## npm Commands
+
+### Server
+
+##### Development
+
+```Shell
+npm start
+```
+
+Starts the development server at `localhost:3000`. Changes in the application code will be hot-reloaded.
+
+```Shell
+npm run start:tunnel
+```
+Starts the development server and tunnels it with `ngrok`, making the website
+available to the public internet. Useful for testing on different devices in different locations.
+
+##### Production
+
+```Shell
+npm run start:prod
+```
+
+Starts the production server, configured for optimal performance: assets are
+minified and served gzipped.
+
+##### Change Port
+
+```Shell
+npm start -- --port 5000
+```
+
+
+### Build
+
+```Shell
+npm run build
+```
+
+Prepares your app for deployment. Optimizes and minifies all files, treeshakes the JavaScript piping them to a folder called `build`. Upload the contents of `build` to your web server to see your work live!
+
+### Clean
+
+```Shell
+npm run clean:all
+```
+
+Removes `./build`, `./stats.json` and `./coverage`
+
+
+### Generators
+
+```Shell
+npm run generate
+```
+
+Allows you to auto-generate boilerplate code for common parts of the
+application, specifically `component`s, `container`s, and `route`s. You can
+also run `npm run generate <part>` to skip the first selection. (e.g. `npm run
+generate container`)
+
+
+### Testing
+
+```Shell
+npm test
+```
+
+Tests your application with the unit tests specified in the `*.test.js` files
+throughout the application.   All the `test` commands allow an optional `-- --grep string` argument to filter
+the tests ran by Karma. Useful if you need to run a specific test only.
+
+```Shell
+# Run only the Button component tests
+npm run test:watch -- --grep Button
+```
+
+##### Browsers
+
+To choose the browser to run your unit tests in (Chrome by default), run one of
+the following commands:
+
+##### Firefox
+
+```Shell
+npm run test:firefox
+```
+
+##### Safari
+
+```Shell
+npm run test:safari
+```
+
+##### Internet Explorer
+
+*Windows only!*
+
+```Shell
+npm run test:ie
+```
+
+##### Watching
+
+```Shell
+npm run test:watch
+```
+
+Watches changes to your application and reruns tests whenever a file changes.
+
+##### Performance testing
+
+```Shell
+npm run pagespeed
+```
+
+With the remote server running (i.e. while `npm run start:prod` is running in
+another terminal session), enter this command to run Google PageSpeed Insights
+and get a performance check right in your terminal!
+
+##### Dependency size test
+
+```Shell
+npm run analyze
+```
+
+This command will generate a `stats.json` file from your production build, which
+you can upload to the [webpack analyzer](https://webpack.github.io/analyse/). This
+analyzer will visualize your dependencies and chunks with detailed statistics
+about the bundle size.
+
+### Linting
+
+```Shell
+npm run lint
+```
+
+Lints your JavaScript and CSS.
+
+##### JavaScript
+
+```Shell
+npm run lint:js
+```
+
+Only lints your JavaScript.
+
+##### CSS
+
+```Shell
+npm run lint:css
+```
+
+Only lints your CSS.
+
+#####Why not let webpack auto-lint on filesave, you ask?
+
+We've found that this can degrade the build performance quite a bit. "Live linting" should be a concern of the IDE so setting this up is the individual developers responsibility. Lint does run on `precommit` so there is a safety net.
 
 
 ## File Glossary
